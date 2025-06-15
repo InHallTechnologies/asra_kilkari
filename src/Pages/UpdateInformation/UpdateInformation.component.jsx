@@ -2,9 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import Styles from "./UpdateInformation.module.css"
 import UpdateSample from "../../entities/Update.sample";
 import { Button, MenuItem, Select, TextField } from "@mui/material";
-import { onValue, ref } from "firebase/database";
+import { onValue, push, ref, set } from "firebase/database";
 import { firebaseDatabase } from "../../backend/firebaseHandler";
 import { toast } from "react-toastify";
+import moment from "moment";
+import { useNavigate } from "react-router";
 
 const UpdateInformation = () => {
 
@@ -12,6 +14,7 @@ const UpdateInformation = () => {
     const [loading, setLoading] = useState(false)
     const [childList, setChildList] = useState([])
     const [selectedChild, setSelectedChild] = useState({})
+    const navigate = useNavigate()
 
     useEffect(() => {
         let temp = []
@@ -33,7 +36,121 @@ const UpdateInformation = () => {
             toast.warn("कृपया इन क्लिनिक सर्विसेज-दिन दर्ज करें")
             return
         }
-        
+        if (!entryDetail.weight) {
+            toast.warn("कृपया वजन दर्ज करें")
+            return
+        }
+        if (!entryDetail.wasBabyFed) {
+            toast.warn("कृपया चुनें कि बच्चे को खाना खिलाया गया था या नहीं।")
+            return
+        }
+        if (!entryDetail.wasBabyGivenMilkFormula) {
+            toast.warn("कृपया चुनें कि बच्चे को दूध पिलाया गया था या नहीं।")
+            return
+        }
+        if (!entryDetail.wasMotherFed) {
+            toast.warn("कृपया दर्ज करें कि मां को खाना खिलाया गया था या नहीं।")
+            return
+        }
+        if (!entryDetail.homeMadeProteinFoodGiven) {
+            toast.warn("क्या घर का बना प्रोटीन युक्त खाना मिला?")
+            return
+        }
+        if (!entryDetail.roWaterAvailable) {
+            toast.warn("कृपया दर्ज करें कि क्या RO का पानी मिला?")
+            return
+        }
+        if (!entryDetail.wasBeddingClothingDone) {
+            toast.warn("कृपया बिछावन से जुड़ी जानकारी दर्ज करें।")
+            return
+        }
+        if (!entryDetail.handWashTrainingDone) {
+            toast.warn("कृपया दर्ज करें हाथ धुलाई सम्बन्धी प्रशिक्षण दिया गया |")
+            return
+        }
+        if (!entryDetail.teethBrushed) {
+            toast.warn("कृपया दर्ज करें टूथ -ब्रशिंग  की गई")
+            return
+        }
+        if (!entryDetail.wasGroomingDone) {
+            toast.warn("कृपया दर्ज करें नाख़ून एवं बाल कटाई की गई")
+            return
+        }
+        if (!entryDetail.washroomHygieneFollowed) {
+            toast.warn("कृपया दर्ज करें शौचालय के पहले और बाद में शिष्टाचार")
+            return
+        }
+        if (!entryDetail.sanitizationDone) {
+            toast.warn("कृपया दर्ज करें सेनिटाइज़ेशन किया गया")
+            return
+        }
+        if (!entryDetail.houseFloorCleaned) {
+            toast.warn("कृपया दर्ज करें हाउस फ्लोर क्लीनिंग किया गया")
+            return
+        }
+        if (!entryDetail.anotherFacilityReferred) {
+            toast.warn("कृपया दर्ज करें क्या अन्य फेसिलिटी पर रेफर किया")
+            return
+        }
+        if (entryDetail.anotherFacilityReferred === "हाँ" && !entryDetail.anotherFacilityName) {
+            toast.warn("कृपया दर्ज करें किस फेसिलिटी पर रेफेर किया")
+            return
+        }
+        if (!entryDetail.threeTimeDoctorVisitDone) {
+            toast.warn("कृपया डॉक्टर विजिट दर्ज करें")
+            return
+        }
+        if (!entryDetail.wereSixAnganwadiWorkerPresent) {
+            toast.warn("कृपया दर्ज करें क्या 6 आंगनवाड़ी कार्यकर्ता मौजूद रही")
+            return
+        }
+        if (!entryDetail.doctorFromAmaltasAvailable) {
+            toast.warn("कृपया दर्ज करें अमलतास अस्पताल से 2 डॉक्टर उपस्थित है")
+            return
+        }
+        if (entryDetail.inClinicServiceDay === "Day 7" && !entryDetail.seventhDayMUAC) {
+            toast.warn("कृपया दर्ज करें 07-दिवस पर MUAC")
+            return
+        }
+        if (entryDetail.inClinicServiceDay === "Day 14" && !entryDetail.lastDayHB) {
+            toast.warn("कृपया दर्ज करें अंतिम दिवस पर HB")
+            return
+        }
+        if (entryDetail.inClinicServiceDay === "Day 14" && !entryDetail.lastDayHeight) {
+            toast.warn("कृपया दर्ज करें अंतिम दिवस पर ऊंचाई")
+            return
+        }
+        if (entryDetail.inClinicServiceDay === "Day 14" && !entryDetail.lastDayWeight) {
+            toast.warn("कृपया दर्ज करें अंतिम दिवस पर वजन")
+            return
+        }
+        if (entryDetail.inClinicServiceDay === "Day 14" && !entryDetail.lastDayMUAC) {
+            toast.warn("कृपया दर्ज करें अंतिम दिवस पर MUAC")
+            return
+        }
+
+        setLoading(true)
+
+        entryDetail.entryDate = moment().format("DD-MM-YYYY h:mm a")
+        entryDetail.entryByName = "Krati"
+        entryDetail.entryByUid = "ABC123"
+        entryDetail.childName = selectedChild.name
+        entryDetail.childAdmitDate = selectedChild.admitDate
+        entryDetail.childBedNumber = selectedChild.bedNumber
+        entryDetail.childUid = selectedChild.uid
+        entryDetail.entryKey = push(ref(firebaseDatabase, `CHILD_WISE_ENTRY/${selectedChild.uid}`)).key
+
+        selectedChild.lastEntryDate = entryDetail.entryDate
+        selectedChild.numberOfEntries = selectedChild.numberOfEntries+1
+
+        await set(ref(firebaseDatabase, `CHILD_WISE_ENTRY/${selectedChild.uid}/${entryDetail.entryKey}`), entryDetail)
+        await set(ref(firebaseDatabase, `OPERATOR_WISE_ENROLLMENT/${entryDetail.entryByUid}/${entryDetail.childUid}`), selectedChild)
+        await set(ref(firebaseDatabase, `ALL_ENROLLMENTS/${entryDetail.childUid}`), selectedChild)
+        toast.success("दैनिक अपडेट दर्ज किया गया")
+
+        setTimeout(() => {
+            navigate("/home", { replace: true })
+        }, 2000)
     }
 
     const handleChange = (event) => {

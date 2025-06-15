@@ -1,0 +1,98 @@
+.viewEntriesContainer {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+}
+
+.messageImageContainer {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    background-color: #FFF3CC;
+    gap: 10px;
+    height: 100vh;
+    max-height: 100vh;
+}
+
+.illustration {
+    width: 80%;
+    margin-left: 10%;
+}
+
+.logo {
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 10px;
+}
+
+.focusText {
+    font-size: 2rem;
+    color: #444;
+    width: 100%;
+    text-align: center;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.focusSubText {
+    font-size: 1.5rem;
+    color: #444;
+    width: 100%;
+    text-align: center;
+}
+
+.navigationTableContainer {
+    flex: 8;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.navigationContainer {
+    box-shadow: 0px 5px 10px -5px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 5px 10px -5px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 5px 10px -5px rgba(0,0,0,0.75);
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 40px;
+    border-radius: 0 0 5px 5px;
+    position: sticky;
+}
+
+.mpLogo {
+    width: 70px;
+}
+
+.tabsContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
+    padding: 50px 40px 20px;
+}
+
+.selectedTab {
+    color: #282828;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: #FDB10D;
+    text-decoration-thickness: 3px;
+}
+
+.unSelectedTab {
+    color: #282828;
+    font-weight: 400;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.tableContainer {
+    padding: 0 40px;
+}

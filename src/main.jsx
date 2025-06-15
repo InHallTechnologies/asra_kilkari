@@ -8,6 +8,7 @@ import { ToastProvider } from './Contexts/ToastContextProvider.jsx';
 import HomePage from './Pages/HomePage/HomePage.component.jsx';
 import EnrollChild from './Pages/EnrollChild/EnrollChild.component.jsx';
 import UpdateInformation from './Pages/UpdateInformation/UpdateInformation.component.jsx';
+import ViewEntries from './Pages/ViewEntries/ViewEntries.component.jsx';
 
 
 const router = createBrowserRouter([
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
     {
         path: "/update-information",
         element: <UpdateInformation />
+    },
+    {
+        path: "/view-entries",
+        element: <ViewEntries />
     }
 ])
 
