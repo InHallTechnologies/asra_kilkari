@@ -1,0 +1,73 @@
+.authenticationContainer {
+    height: 100dvh;
+    position: relative;
+}
+
+.navBar {
+    padding: 0 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    left: 0;
+
+}
+
+.logo {
+    width: 230px;
+}
+
+.mpLogo {
+    height: 100px;
+}
+
+.heroContainer {
+    display: flex;
+    height: 100%;
+}
+
+.illustrationContainer {
+    flex: 0.4;
+    background-color: #FFF3CC;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.illustration {
+    width: 80%;
+}
+
+.formContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 0.6;
+}
+
+.loginForm {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(-100px);
+    gap: 12px;
+}
+
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.labelText {
+    font-size: 0.8rem;
+    font-weight: bold;
+    opacity: 0.5;
+}
+
+.formTitle {
+    color: #444;
+    margin: 0;
+}
