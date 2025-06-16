@@ -114,9 +114,9 @@ const HomePage = () => {
                 <p className={Styles.sectionHeading}>बच्चों में कुपोषण के ख़िलाफ़ एक <span style={{ textDecoration: "underline", textDecorationColor: "#FDB10D", textDecorationThickness: 3 }}>सशक्त पहल</span> की शुरुआत</p>
 
                 <div className={Styles.imageContainer}>
-                    <img src="/public/home1.jpeg" className={Styles.homeDisplayImage} />
-                    <img src="/public/home2.jpeg" className={Styles.homeDisplayImage} />
-                    <img src="/public/home3.jpeg" className={Styles.homeDisplayImage} />
+                    <img src="/home1.jpeg" className={Styles.homeDisplayImage} />
+                    <img src="/home2.jpeg" className={Styles.homeDisplayImage} />
+                    <img src="/home3.jpeg" className={Styles.homeDisplayImage} />
                 </div>
             </div>
             <div className={Styles.bottomStrip}>
