@@ -109,3 +109,9 @@
 .tableContainer {
     padding: 0 40px;
 }
+
+@media (max-width:927px) {
+    .messageImageContainer {
+        display: none;
+    }
+}

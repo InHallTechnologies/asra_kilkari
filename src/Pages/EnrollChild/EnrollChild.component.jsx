@@ -167,17 +167,17 @@ const EnrollChild = () => {
                     <div className={Styles.formContainer}>
                         <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
                             <label className={Styles.labelText}>बेङ-नंबर</label>
-                            <TextField required value={enrollmentDetail.bedNumber} name="bedNumber" onChange={handleChange} size='small' />
+                            <TextField fullWidth required value={enrollmentDetail.bedNumber} name="bedNumber" onChange={handleChange} size='small' />
                         </div>
 
                         <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
                             <label className={Styles.labelText}>भर्ती होने की दिनांक</label>
-                            <TextField required value={enrollmentDetail.admitDate} name="admitDate" onChange={handleChange} size='small' type="date" />
+                            <TextField fullWidth required value={enrollmentDetail.admitDate} name="admitDate" onChange={handleChange} size='small' type="date" />
                         </div>
 
                         <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
                             <label className={Styles.labelText}>SAM-नंबर</label>
-                            <TextField required value={enrollmentDetail.samNumber} name="samNumber" onChange={handleChange} size='small' />
+                            <TextField fullWidth required value={enrollmentDetail.samNumber} name="samNumber" onChange={handleChange} size='small' />
                         </div>
 
                         <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
@@ -242,7 +242,7 @@ const EnrollChild = () => {
                             <TextField required value={enrollmentDetail.villageName} name="villageName" onChange={handleChange} size='small' />
                         </div>
 
-                        <div style={{ marginTop: '3px', gridColumn:"2/4" }} className={Styles.inputContainer}>
+                        <div style={{ marginTop: '3px' }} className={`${Styles.inputContainer} ${Styles.span2}`}>
                             <label className={Styles.labelText}>पता डिटेल में</label>
                             <TextField required value={enrollmentDetail.address} name="address" onChange={handleChange} size='small' />
                         </div>

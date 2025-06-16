@@ -18,6 +18,7 @@
     overflow: hidden;
     position: relative;
     padding-top: 20px;
+
 }
 
 .detailsContainer {
@@ -37,6 +38,7 @@
 
 .illustration {
     z-index: 2;
+    width: 100%;
 }
 
 .illustrationBackground {
@@ -52,19 +54,18 @@
 }
 
 .optionsContainer {
-    display: flex;
+    display: grid;
     gap: 20px;
-    width: 90%;
-    margin: 0 auto;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    
     margin-top: 12px;
+   
 }
 
 .optionsContentContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+   
     flex: 1;
-
+    width: 100%;
     border-radius: 12px;
     cursor: pointer;
     gap: 12px;
@@ -100,6 +101,7 @@
     gap: 30px;
     width: 100%;
     padding: 0 10%;
+    flex-wrap: wrap;
 }
 
 .homeDisplayImage {
@@ -128,127 +130,37 @@
 
 }
 
-@media (max-width:1000px) {
-    .heroContainer {
-        background-color: #FFF3CC;
-        display: flex;
-        flex-direction: column;
-        padding: 0 8%;
-        overflow: hidden;
-        position: relative;
-        padding-top: 20px;
-        text-align: center;
+@media (max-width:1117px) {
+    .detailsContainer {}
+
+    .heroTitle {
+        font-size: 1.5rem;
     }
 
-    .detailsContainer {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        position: relative;
-    }
-
-    .illustrationContainer {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .illustration {
-        z-index: 2;
-    }
-
-    .illustrationBackground {
-        position: absolute;
-        z-index: 0;
-        scale: 0.9;
-        margin-bottom: -20px;
-    }
-
-    .featureContainer {
-        padding: 0 8%;
-        margin-top: 40px;
-    }
-
-    .optionsContainer {
-        display: flex;
-        gap: 20px;
-        width: 90%;
-        margin: 0 auto;
-        margin-top: 12px;
-    }
-
-    .optionsContentContainer {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        flex: 1;
-
-        border-radius: 12px;
-        cursor: pointer;
-        gap: 12px;
-        padding: 30px;
-        text-decoration: none;
-        color: #1e1e1e;
-    }
-
-
-    .optionTitle {
-        font-weight: bold;
-        opacity: 0.8;
-        font-size: 1.1rem;
-        margin-top: 16px;
-    }
-
-    .optionSubtitle {
-        font-size: 0.8rem;
-        opacity: 0.8;
-    }
-
-    .sectionHeading {
-        font-size: 1.3rem;
-        width: 100%;
-        text-align: center;
-        padding: 40px 20px 30px;
-        font-weight: 700;
-    }
-
-    .imageContainer {
-        display: flex;
-        flex-direction: row;
-        gap: 30px;
-        width: 100%;
-        padding: 0 10%;
-    }
-
-    .homeDisplayImage {
-        flex: 1;
-        width: 30%;
-        border-radius: 10px;
-    }
-
-    .bottomStrip {
-        width: 100%;
-        background-color: brown;
-        height: 30px;
-        margin-top: 40px;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .bottomText {
-        color: white;
-        font-weight: 600;
-        font-size: 0.9rem;
-        width: 100%;
-        text-align: center;
-
+    .heroSubTitle {
+        font-size: 1rem;
     }
 }
 
-@media (max-width:400px) {
+@media (max-width:979px) {
+    .heroContainer {
+        flex-direction: column;
 
+    }
+
+    .illustration {
+        max-width: 350px;
+    }
+
+    .illustrationBackground {
+        display: none;
+    }
+
+    .heroTitle {
+        margin-top: 20px;
+    }
+
+    .illustrationContainer {
+        margin-top: 20px;
+    }
 }

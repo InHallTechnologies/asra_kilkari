@@ -19,7 +19,7 @@ const UpdateInformation = () => {
     const navigate = useNavigate()
     const [userData] = useContext(UserContext)
 
-    useEffect(()=>{
+    useEffect(() => {
         if (!firebaseAuth.currentUser) {
             navigate("/")
         }
@@ -186,7 +186,7 @@ const UpdateInformation = () => {
                     <img className={Styles.mpLogo} src="/mp_logo.png" alt="Madhya Pradesh" />
                     <div>
                         <p><strong>{userData.name}</strong></p>
-                        <p onClick={handleLogout} style={{cursor:"pointer", textDecoration:"underline"}}>Logout</p>
+                        <p onClick={handleLogout} style={{ cursor: "pointer", textDecoration: "underline" }}>Logout</p>
                     </div>
                 </div>
 
@@ -196,7 +196,7 @@ const UpdateInformation = () => {
                     <div className={Styles.formContainer}>
                         <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
                             <label className={Styles.labelText}>बच्चे का नाम</label>
-                            <Select required value={selectedChild.name} onChange={(event) => { setSelectedChild(event.target.value) }} size='small'>
+                            <Select sx={{ width: '100%' }} required value={selectedChild.name} onChange={(event) => { setSelectedChild(event.target.value) }} size='small'>
                                 {
                                     childList
                                     &&

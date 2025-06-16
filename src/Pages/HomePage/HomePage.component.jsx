@@ -13,7 +13,7 @@ const HomePage = () => {
     const [userData] = useContext(UserContext)
     const navigate = useNavigate()
 
-    useEffect(()=>{
+    useEffect(() => {
         if (!firebaseAuth.currentUser) {
             navigate("/")
         }
@@ -30,14 +30,14 @@ const HomePage = () => {
                 <img className={Styles.logo} src="/logo.png" alt="Kilkari" />
                 <div>
                     <p><strong>{userData.name}</strong></p>
-                    <p onClick={handleLogout} style={{cursor:"pointer", textDecoration:"underline"}}>Logout</p>
+                    <p onClick={handleLogout} style={{ cursor: "pointer", textDecoration: "underline" }}>Logout</p>
                 </div>
             </div>
 
             <div className={Styles.heroContainer}>
                 <div className={Styles.detailsContainer}>
-                    <h1 style={{ marginTop: '-80px' }}>भूख और कुपोषण से मुक्त भारत — हर बच्चे के चेहरे पर मुस्कान</h1>
-                    <p>आइए मिलकर ऐसा भारत बनाएं जहाँ कोई बच्चा भूखा न सोए और हर चेहरे पर सेहतमंद मुस्कान हो। कुपोषण सपनों को अधूरा छोड़ देता है। सही पोषण और सामूहिक प्रयास से हम बच्चों को स्वस्थ और खुशहाल भविष्य दे सकते हैं।</p>
+                    <h1 className={Styles.heroTitle}>भूख और कुपोषण से मुक्त भारत — हर बच्चे के चेहरे पर मुस्कान</h1>
+                    <p className={Styles.heroSubTitle}>आइए मिलकर ऐसा भारत बनाएं जहाँ कोई बच्चा भूखा न सोए और हर चेहरे पर सेहतमंद मुस्कान हो। कुपोषण सपनों को अधूरा छोड़ देता है। सही पोषण और सामूहिक प्रयास से हम बच्चों को स्वस्थ और खुशहाल भविष्य दे सकते हैं।</p>
                 </div>
 
                 <div className={Styles.illustrationContainer}>
@@ -52,72 +52,71 @@ const HomePage = () => {
                 <div className={Styles.optionsContainer}>
                     {
                         userData.access === "Operator"
-                        ?
-                        <>
-                            <Link role='button' to="/enroll-child" style={{ backgroundColor: '#FFF8E6' }} className={Styles.optionsContentContainer}>
-                                <div>
-                                    <FaBaby size={40} color="#A26D4F" />
-                                    <p className={Styles.optionTitle}>नए बच्चे का नामांकन करें</p>
-                                    <p className={Styles.optionSubtitle}>नए बच्चे का पूरा विवरण दर्ज करें और नामांकन प्रक्रिया पूरी करें।</p>
-                                </div>
-                            </Link>
+                            ?
+                            <>
+                                <Link role='button' to="/enroll-child" style={{ backgroundColor: '#FFF8E6' }} className={Styles.optionsContentContainer}>
+                                    <div style={{ width: '100%', }} >
+                                        <FaBaby size={40} color="#A26D4F" />
+                                        <p className={Styles.optionTitle}>नए बच्चे का नामांकन करें</p>
+                                        <p className={Styles.optionSubtitle}>नए बच्चे का पूरा विवरण दर्ज करें और नामांकन प्रक्रिया पूरी करें।</p>
+                                    </div>
+                                </Link>
 
-                            <Link role='button' to="/update-information" style={{ backgroundColor: '#FFEBD8' }} className={Styles.optionsContentContainer}>
-                                <div>
-                                    <FaCalendar size={38} color="#E09B74" />
-                                    <p className={Styles.optionTitle}>बच्चे का दैनिक अपडेट दें</p>
-                                    <p className={Styles.optionSubtitle}>बच्चे की वर्तमान स्वास्थ्य स्थिति और पोषण संबंधी जानकारी अपडेट करें।</p>
-                                </div>
-                            </Link>
+                                <Link role='button' to="/update-information" style={{ backgroundColor: '#FFEBD8' }} className={Styles.optionsContentContainer}>
+                                    <div style={{ width: '100%', }} >
+                                        <FaCalendar size={38} color="#E09B74" />
+                                        <p className={Styles.optionTitle}>बच्चे का दैनिक अपडेट दें</p>
+                                        <p className={Styles.optionSubtitle}>बच्चे की वर्तमान स्वास्थ्य स्थिति और पोषण संबंधी जानकारी अपडेट करें।</p>
+                                    </div>
+                                </Link>
 
-                            <Link role='button' to="/view-entries" style={{ backgroundColor: '#DFFFF9' }} className={Styles.optionsContentContainer}>
-                                <div>
-                                    <FaListAlt size={40} color="#5CAAA0" />
-                                    <p className={Styles.optionTitle}>रिकॉर्ड देखें</p>
-                                    <p className={Styles.optionSubtitle}>सभी पंजीकृत बच्चों का रिकॉर्ड और अद्यतन जानकारी देखें।</p>
-                                </div>
-                            </Link>
-                        </>
-                        :
-                        <>
-                            <Link role='button' to="/view-entries" style={{ backgroundColor: '#DFFFF9' }} className={Styles.optionsContentContainer}>
-                                <div>
-                                    <FaListAlt size={40} color="#5CAAA0" />
-                                    <p className={Styles.optionTitle}>रिकॉर्ड देखें</p>
-                                    <p className={Styles.optionSubtitle}>सभी पंजीकृत बच्चों का रिकॉर्ड और अद्यतन जानकारी देखें।</p>
-                                </div>
-                            </Link>
+                                <Link role='button' to="/view-entries" style={{ backgroundColor: '#DFFFF9' }} className={Styles.optionsContentContainer}>
+                                    <div style={{ width: '100%', }} >
+                                        <FaListAlt size={40} color="#5CAAA0" />
+                                        <p className={Styles.optionTitle}>रिकॉर्ड देखें</p>
+                                        <p className={Styles.optionSubtitle}>सभी पंजीकृत बच्चों का रिकॉर्ड और अद्यतन जानकारी देखें।</p>
+                                    </div>
+                                </Link>
+                            </>
+                            :
+                            <>
+                                <Link role='button' to="/view-entries" style={{ backgroundColor: '#DFFFF9' }} className={Styles.optionsContentContainer}>
+                                    <div>
+                                        <FaListAlt size={40} color="#5CAAA0" />
+                                        <p className={Styles.optionTitle}>रिकॉर्ड देखें</p>
+                                        <p className={Styles.optionSubtitle}>सभी पंजीकृत बच्चों का रिकॉर्ड और अद्यतन जानकारी देखें।</p>
+                                    </div>
+                                </Link>
 
-                            <Link role='button' to="" style={{ backgroundColor: '#FFF8E6' }} className={Styles.optionsContentContainer}>
-                                <div>
-                                    <IoPeople size={40} color="#A26D4F" />
-                                    <p className={Styles.optionTitle}>सभी ऑपरेटर देखें</p>
-                                    <p className={Styles.optionSubtitle}>वे सभी ऑपरेटर जो प्रविष्टियाँ कर रहे हैं</p>
-                                </div>
-                            </Link>
+                                <Link role='button' to="" style={{ backgroundColor: '#FFF8E6' }} className={Styles.optionsContentContainer}>
+                                    <div>
+                                        <IoPeople size={40} color="#A26D4F" />
+                                        <p className={Styles.optionTitle}>सभी ऑपरेटर देखें</p>
+                                        <p className={Styles.optionSubtitle}>वे सभी ऑपरेटर जो प्रविष्टियाँ कर रहे हैं</p>
+                                    </div>
+                                </Link>
 
-                            <Link role='button' to="" style={{ backgroundColor: '#FFEBD8' }} className={Styles.optionsContentContainer}>
-                                <div>
-                                    <BsFillFileBarGraphFill size={38} color="#E09B74" />
-                                    <p className={Styles.optionTitle}>सारांश देखें</p>
-                                    <p className={Styles.optionSubtitle}>मुख्य बिंदुओं और गतिविधियों का संक्षिप्त विवरण देखें</p>
-                                </div>
-                            </Link>
+                                <Link role='button' to="" style={{ backgroundColor: '#FFEBD8' }} className={Styles.optionsContentContainer}>
+                                    <div>
+                                        <BsFillFileBarGraphFill size={38} color="#E09B74" />
+                                        <p className={Styles.optionTitle}>सारांश देखें</p>
+                                        <p className={Styles.optionSubtitle}>मुख्य बिंदुओं और गतिविधियों का संक्षिप्त विवरण देखें</p>
+                                    </div>
+                                </Link>
 
-                        </>
+                            </>
                     }
-                    
+
                 </div>
             </div>
 
             <div>
-                <p className={Styles.sectionHeading}>बच्चों में कुपोषण के ख़िलाफ़ एक <span style={{textDecoration:"underline", textDecorationColor:"#FDB10D", textDecorationThickness:3}}>सशक्त पहल</span> की शुरुआत</p>
+                <p className={Styles.sectionHeading}>बच्चों में कुपोषण के ख़िलाफ़ एक <span style={{ textDecoration: "underline", textDecorationColor: "#FDB10D", textDecorationThickness: 3 }}>सशक्त पहल</span> की शुरुआत</p>
 
                 <div className={Styles.imageContainer}>
                     <img src="/public/home1.jpeg" className={Styles.homeDisplayImage} />
                     <img src="/public/home2.jpeg" className={Styles.homeDisplayImage} />
                     <img src="/public/home3.jpeg" className={Styles.homeDisplayImage} />
-
                 </div>
             </div>
             <div className={Styles.bottomStrip}>

@@ -41,14 +41,7 @@ const ViewEntries = () => {
     }, [])
 
     const handleCurrentTab = (value) => {
-        setCurrentTab(value)
-
-
-        let temp = []
-
-        if (value === "CHILDREN") {
-
-        }
+        setCurrentTab(value);
     }
 
     return (
