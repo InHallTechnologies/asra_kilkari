@@ -1,16 +1,32 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Styles from "./EnrollChild.module.css"
 import EnrollmentSample from "../../entities/Enrollment.sample";
 import { toast } from "react-toastify";
 import { Button, MenuItem, Select, TextField } from "@mui/material";
-import { firebaseDatabase } from "../../backend/firebaseHandler";
+import { firebaseAuth, firebaseDatabase } from "../../backend/firebaseHandler";
 import { push, ref, set } from "firebase/database";
 import moment from "moment";
+import UserContext from "../../Contexts/UserData.context";
+import { signOut } from "firebase/auth";
+import { useNavigate } from "react-router";
 
 const EnrollChild = () => {
 
     const [enrollmentDetail, setEnrollmentDetail] = useState(EnrollmentSample)
     const [loading, setLoading] = useState(false)
+    const [userData] = useContext(UserContext)
+    const navigate = useNavigate()
+
+    useEffect(()=>{
+        if (!firebaseAuth.currentUser) {
+            navigate("/")
+        }
+    }, [])
+
+    const handleLogout = () => {
+        signOut(firebaseAuth);
+        navigate("/")
+    }
 
     const handleSubmit = async () => {
         if (!enrollmentDetail.bedNumber) {
@@ -107,8 +123,8 @@ const EnrollChild = () => {
         }
 
         setLoading(true)
-        enrollmentDetail.enrolledByName = "krati"
-        enrollmentDetail.enrolledByUid = "ABC123"
+        enrollmentDetail.enrolledByName = userData.name
+        enrollmentDetail.enrolledByUid = userData.uid
         enrollmentDetail.enrollmentDate = moment().format("DD-MM-YYYY h:mm a")
         enrollmentDetail.uid = push(ref(firebaseDatabase, `ALL_CHILDREN_ENROLLED`)).key
         enrollmentDetail.numberOfEntries = 0
@@ -117,6 +133,10 @@ const EnrollChild = () => {
         await set(ref(firebaseDatabase, `OPERATOR_WISE_ENROLLMENT/${enrollmentDetail.enrolledByUid}/${enrollmentDetail.uid}`), enrollmentDetail)
         await set(ref(firebaseDatabase, `ALL_ENROLLMENTS/${enrollmentDetail.uid}`), enrollmentDetail)
         toast.success("नया बच्चा नामांकित हुआ")
+
+        setTimeout(() => {
+            navigate("/home", { replace: true })
+        }, 2000)
     }
 
     const handleChange = (event) => {
@@ -135,9 +155,9 @@ const EnrollChild = () => {
             <div className={Styles.formHeaderContainer}>
                 <div className={Styles.navigationContainer}>
                     <img className={Styles.mpLogo} src="/mp_logo.png" alt="Madhya Pradesh" />
-                    <div className={Styles.nameLocationContainer}>
-                        <p>Krati</p>
-                        <p>Sonkatch</p>
+                    <div>
+                        <p><strong>{userData.name}</strong></p>
+                        <p onClick={handleLogout} style={{cursor:"pointer", textDecoration:"underline"}}>Logout</p>
                     </div>
                 </div>
 

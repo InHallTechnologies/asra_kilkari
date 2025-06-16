@@ -1,15 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Styles from "./ViewEntries.module.css"
 import { onValue, ref } from "firebase/database";
-import { firebaseDatabase } from "../../backend/firebaseHandler";
+import { firebaseAuth, firebaseDatabase } from "../../backend/firebaseHandler";
 import { Box, CircularProgress, MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import UserContext from "../../Contexts/UserData.context";
+import { useNavigate } from "react-router";
+import { signOut } from "firebase/auth";
 
 const ViewEntries = () => {
 
     const [allChildren, setAllChildren] = useState([])
-    const [allEntries, setAllEntries] = useState([])
     const [loading, setLoading] = useState([])
     const [currentTab, setCurrentTab] = useState("CHILDREN")
+    const [userData] = useContext(UserContext)
+    const navigate = useNavigate()
+
+     useEffect(()=>{
+        if (!firebaseAuth.currentUser) {
+            navigate("/")
+        }
+    }, [])
+
+    const handleLogout = () => {
+        signOut(firebaseAuth);
+        navigate("/")
+    }
 
     useEffect(() => {
         let temp = []
@@ -49,8 +64,8 @@ const ViewEntries = () => {
                 <div className={Styles.navigationContainer}>
                     <img className={Styles.mpLogo} src="/mp_logo.png" alt="Kilkari" />
                     <div>
-                        <p><strong>Krati</strong></p>
-                        <p>Sonkatch</p>
+                        <p><strong>{userData.name}</strong></p>
+                        <p onClick={handleLogout} style={{cursor:"pointer", textDecoration:"underline"}}>Logout</p>
                     </div>
                 </div>
 
@@ -130,16 +145,19 @@ const DailyUpdate = ({ allChildren }) => {
     const [allEtries, setAllEntries] = useState([])
 
     useEffect(() => {
-        const dailyEntryRef = ref(firebaseDatabase, `CHILD_WISE_ENTRY/${selectedChild}`);
-        const data = [];
-        onValue(dailyEntryRef, (snapshot) => {
-            if (snapshot.exists()) {
-                snapshot.forEach(item => {
-                    data.push(item.val());
-                })
-                setAllEntries([...data.reverse()]);
-            }
-        }, { onlyOnce: true })
+        if (selectedChild) {
+            const dailyEntryRef = ref(firebaseDatabase, `CHILD_WISE_ENTRY/${selectedChild}`);
+            const data = [];
+            onValue(dailyEntryRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    snapshot.forEach(item => {
+                        data.push(item.val());
+                    })
+                    setAllEntries([...data.reverse()]);
+                }
+            }, { onlyOnce: true })
+        }
+        
     }, [selectedChild])
 
 
@@ -147,7 +165,7 @@ const DailyUpdate = ({ allChildren }) => {
         <div>
             <div className={Styles.inputContainer}>
                 <label className={Styles.inputLabel}>बच्चे का नाम</label>
-                <Select size='small' sx={{ width: '100%' }} value={selectedChild} onChange={event => setSelectedChild(event.target.value)}>
+                <Select size='small' sx={{ width: '50%' }} value={selectedChild} onChange={event => setSelectedChild(event.target.value)}>
                     {
                         allChildren.map(item => <MenuItem key={item.uid} value={item.uid}>{item['name']}</MenuItem>)
                     }
@@ -172,7 +190,6 @@ const DailyUpdate = ({ allChildren }) => {
                     <TableBody style={{ backgroundColor: "white" }}>
                         {
                             allEtries.map((item, index) => {
-                                console.log(item)
                                 return (
                                     <TableRow key={index.toString()} >
                                         <TableCell>{(index + 1).toString()}</TableCell>

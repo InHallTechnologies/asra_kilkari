@@ -75,6 +75,19 @@
     padding: 50px 40px 20px;
 }
 
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.labelText {
+    font-size: 0.8rem;
+    font-weight: medium;
+    opacity: 0.5;
+}
+
 .selectedTab {
     color: #282828;
     font-weight: 600;

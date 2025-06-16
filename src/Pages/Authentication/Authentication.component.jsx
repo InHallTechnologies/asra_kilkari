@@ -1,20 +1,32 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Styles from "./Authentication.module.css";
 import { Button, TextField } from "@mui/material";
 import { toast } from "react-toastify";
 import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
-import { firebaseAuth } from "../../backend/firebaseHandler";
+import { firebaseAuth, firebaseDatabase } from "../../backend/firebaseHandler";
 import { useNavigate } from "react-router";
+import { onValue, ref } from "firebase/database";
+import UserContext from "../../Contexts/UserData.context";
 
 const Authentication = () => {
 
     const [credentials, setCredentials] = useState({ emailId: "", password: "", loading: true });
+    const [userData, setUserData] = useContext(UserContext)
     const navigate = useNavigate();
 
     useEffect(() => {
         const unsubScribe = onAuthStateChanged(firebaseAuth, (user) => {
             if (user) {
-                navigate("/home")
+                console.log(user.uid)
+                onValue(ref(firebaseDatabase, `USER_ARCHIVE/${user.uid}`), (snap) => {
+                    if (snap.exists()) {
+                        setUserData(snap.val())
+                        navigate("/home")
+                    } else {
+                        alert("Something went wrong!")
+                    }
+                })
+                
             }
             setCredentials({ ...credentials, loading: false })
         })
@@ -22,7 +34,7 @@ const Authentication = () => {
         return () => {
             unsubScribe();
         }
-    })
+    }, [])
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -31,16 +43,19 @@ const Authentication = () => {
 
 
     const handleSubmit = async () => {
-        try {
-            setCredentials({ ...credentials, loading: true })
-            await signInWithEmailAndPassword(firebaseAuth, credentials.emailId, credentials.password)
-            navigate("/home")
-        } catch (err) {
+        setCredentials({ ...credentials, loading: true })
+        await signInWithEmailAndPassword(firebaseAuth, credentials.emailId, credentials.password).then((user)=>{
+            onValue(ref(firebaseDatabase, `USER_ARCHIVE/${user.user.uid}`), (snap) => {
+                if (snap.exists()) {
+                    setUserData(snap.val())
+                    navigate("/home")
+                } else {
+                    alert("Something went wrong!")
+                }
+            })
+        }).catch(err => {
             toast.warn(err.message)
-        } finally {
-            setCredentials({ ...credentials, loading: false })
-        }
-
+        })
     }
 
     return (

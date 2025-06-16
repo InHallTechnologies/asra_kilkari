@@ -71,3 +71,27 @@
     color: #444;
     margin: 0;
 }
+
+@media (max-width:780px) {
+    .illustrationContainer {
+        display: none;
+    }
+
+    .formContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+    }
+}
+
+@media (max-width:400px) {
+
+    .logo {
+        width: 150px;
+    }
+
+    .mpLogo {
+        height: 80px;
+    }
+}

@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Styles from "./UpdateInformation.module.css"
 import UpdateSample from "../../entities/Update.sample";
 import { Button, MenuItem, Select, TextField } from "@mui/material";
 import { onValue, push, ref, set } from "firebase/database";
-import { firebaseDatabase } from "../../backend/firebaseHandler";
+import { firebaseAuth, firebaseDatabase } from "../../backend/firebaseHandler";
 import { toast } from "react-toastify";
 import moment from "moment";
 import { useNavigate } from "react-router";
+import UserContext from "../../Contexts/UserData.context";
+import { signOut } from "firebase/auth";
 
 const UpdateInformation = () => {
 
@@ -15,11 +17,23 @@ const UpdateInformation = () => {
     const [childList, setChildList] = useState([])
     const [selectedChild, setSelectedChild] = useState({})
     const navigate = useNavigate()
+    const [userData] = useContext(UserContext)
+
+    useEffect(()=>{
+        if (!firebaseAuth.currentUser) {
+            navigate("/")
+        }
+    }, [])
+
+    const handleLogout = () => {
+        signOut(firebaseAuth);
+        navigate("/")
+    }
 
     useEffect(() => {
         let temp = []
 
-        onValue(ref(firebaseDatabase, `OPERATOR_WISE_ENROLLMENT/ABC123`), (snap) => {
+        onValue(ref(firebaseDatabase, `OPERATOR_WISE_ENROLLMENT/${userData.uid}`), (snap) => {
             if (snap.exists()) {
                 for (const key in snap.val()) {
                     let item = snap.child(key).val()
@@ -132,8 +146,8 @@ const UpdateInformation = () => {
         setLoading(true)
 
         entryDetail.entryDate = moment().format("DD-MM-YYYY h:mm a")
-        entryDetail.entryByName = "Krati"
-        entryDetail.entryByUid = "ABC123"
+        entryDetail.entryByName = userData.name
+        entryDetail.entryByUid = userData.uid
         entryDetail.childName = selectedChild.name
         entryDetail.childAdmitDate = selectedChild.admitDate
         entryDetail.childBedNumber = selectedChild.bedNumber
@@ -170,18 +184,18 @@ const UpdateInformation = () => {
             <div className={Styles.formHeaderContainer}>
                 <div className={Styles.navigationContainer}>
                     <img className={Styles.mpLogo} src="/mp_logo.png" alt="Madhya Pradesh" />
-                    <div className={Styles.nameLocationContainer}>
-                        <p>Krati</p>
-                        <p>Sonkatch</p>
+                    <div>
+                        <p><strong>{userData.name}</strong></p>
+                        <p onClick={handleLogout} style={{cursor:"pointer", textDecoration:"underline"}}>Logout</p>
                     </div>
                 </div>
 
                 <div className={Styles.formTitleContainer}>
-                    <p className={Styles.formTitle}>कृपया नए बच्चे का नामांकन करने के लिए नीचे दिए गए विवरण भरें।</p>
+                    <p className={Styles.formTitle}>दैनिक रिकॉर्ड अपडेट करने के लिए नीचे दी गई जानकारी भरें</p>
 
                     <div className={Styles.formContainer}>
                         <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>बेङ-नंबर</label>
+                            <label className={Styles.labelText}>बच्चे का नाम</label>
                             <Select required value={selectedChild.name} onChange={(event) => { setSelectedChild(event.target.value) }} size='small'>
                                 {
                                     childList

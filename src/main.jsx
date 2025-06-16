@@ -9,7 +9,7 @@ import HomePage from './Pages/HomePage/HomePage.component.jsx';
 import EnrollChild from './Pages/EnrollChild/EnrollChild.component.jsx';
 import UpdateInformation from './Pages/UpdateInformation/UpdateInformation.component.jsx';
 import ViewEntries from './Pages/ViewEntries/ViewEntries.component.jsx';
-
+import { UserProvider } from './Contexts/UserData.context.jsx';
 
 const router = createBrowserRouter([
     {
@@ -38,8 +38,10 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')).render(
 
     <ThemeProvider theme={theme} >
-        <ToastProvider>
-            <RouterProvider router={router} />
-        </ToastProvider>
+        <UserProvider>
+            <ToastProvider>
+                <RouterProvider router={router} />
+            </ToastProvider>
+        </UserProvider>
     </ThemeProvider>
 )

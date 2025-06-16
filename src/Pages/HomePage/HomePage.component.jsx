@@ -3,13 +3,25 @@ import { signOut } from "firebase/auth";
 import { firebaseAuth } from "../../backend/firebaseHandler";
 import { FaCalendar, FaBaby, FaListAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router";
-
+import { useContext, useEffect } from "react";
+import UserContext from "../../Contexts/UserData.context";
+import { IoPeople } from "react-icons/io5";
+import { BsFillFileBarGraphFill } from "react-icons/bs";
 
 const HomePage = () => {
 
+    const [userData] = useContext(UserContext)
+    const navigate = useNavigate()
+
+    useEffect(()=>{
+        if (!firebaseAuth.currentUser) {
+            navigate("/")
+        }
+    }, [])
 
     const handleLogout = () => {
         signOut(firebaseAuth);
+        navigate("/")
     }
 
     return (
@@ -17,8 +29,8 @@ const HomePage = () => {
             <div className={Styles.navigationContainer}>
                 <img className={Styles.logo} src="/logo.png" alt="Kilkari" />
                 <div>
-                    <p><strong>Krati</strong></p>
-                    <p>Sonkatch</p>
+                    <p><strong>{userData.name}</strong></p>
+                    <p onClick={handleLogout} style={{cursor:"pointer", textDecoration:"underline"}}>Logout</p>
                 </div>
             </div>
 
@@ -38,30 +50,78 @@ const HomePage = () => {
 
             <div className={Styles.featureContainer}>
                 <div className={Styles.optionsContainer}>
-                    <Link role='button' to="/enroll-child" style={{ backgroundColor: '#FFF8E6' }} className={Styles.optionsContentContainer}>
-                        <div>
-                            <FaBaby size={40} color="#A26D4F" />
-                            <p className={Styles.optionTitle}>नए बच्चे का नामांकन करें</p>
-                            <p className={Styles.optionSubtitle}>नए बच्चे का पूरा विवरण दर्ज करें और नामांकन प्रक्रिया पूरी करें।</p>
-                        </div>
-                    </Link>
+                    {
+                        userData.access === "Operator"
+                        ?
+                        <>
+                            <Link role='button' to="/enroll-child" style={{ backgroundColor: '#FFF8E6' }} className={Styles.optionsContentContainer}>
+                                <div>
+                                    <FaBaby size={40} color="#A26D4F" />
+                                    <p className={Styles.optionTitle}>नए बच्चे का नामांकन करें</p>
+                                    <p className={Styles.optionSubtitle}>नए बच्चे का पूरा विवरण दर्ज करें और नामांकन प्रक्रिया पूरी करें।</p>
+                                </div>
+                            </Link>
 
-                    <Link role='button' to="/update-information" style={{ backgroundColor: '#FFEBD8' }} className={Styles.optionsContentContainer}>
-                        <div>
-                            <FaCalendar size={38} color="#E09B74" />
-                            <p className={Styles.optionTitle}>बच्चे का दैनिक अपडेट दें</p>
-                            <p className={Styles.optionSubtitle}>बच्चे की वर्तमान स्वास्थ्य स्थिति और पोषण संबंधी जानकारी अपडेट करें।</p>
-                        </div>
-                    </Link>
+                            <Link role='button' to="/update-information" style={{ backgroundColor: '#FFEBD8' }} className={Styles.optionsContentContainer}>
+                                <div>
+                                    <FaCalendar size={38} color="#E09B74" />
+                                    <p className={Styles.optionTitle}>बच्चे का दैनिक अपडेट दें</p>
+                                    <p className={Styles.optionSubtitle}>बच्चे की वर्तमान स्वास्थ्य स्थिति और पोषण संबंधी जानकारी अपडेट करें।</p>
+                                </div>
+                            </Link>
 
-                    <Link role='button' to="/view-entries" style={{ backgroundColor: '#DFFFF9' }} className={Styles.optionsContentContainer}>
-                        <div>
-                            <FaListAlt size={40} color="#5CAAA0" />
-                            <p className={Styles.optionTitle}>रिकॉर्ड देखें</p>
-                            <p className={Styles.optionSubtitle}>सभी पंजीकृत बच्चों का रिकॉर्ड और अद्यतन जानकारी देखें।</p>
-                        </div>
-                    </Link>
+                            <Link role='button' to="/view-entries" style={{ backgroundColor: '#DFFFF9' }} className={Styles.optionsContentContainer}>
+                                <div>
+                                    <FaListAlt size={40} color="#5CAAA0" />
+                                    <p className={Styles.optionTitle}>रिकॉर्ड देखें</p>
+                                    <p className={Styles.optionSubtitle}>सभी पंजीकृत बच्चों का रिकॉर्ड और अद्यतन जानकारी देखें।</p>
+                                </div>
+                            </Link>
+                        </>
+                        :
+                        <>
+                            <Link role='button' to="/view-entries" style={{ backgroundColor: '#DFFFF9' }} className={Styles.optionsContentContainer}>
+                                <div>
+                                    <FaListAlt size={40} color="#5CAAA0" />
+                                    <p className={Styles.optionTitle}>रिकॉर्ड देखें</p>
+                                    <p className={Styles.optionSubtitle}>सभी पंजीकृत बच्चों का रिकॉर्ड और अद्यतन जानकारी देखें।</p>
+                                </div>
+                            </Link>
+
+                            <Link role='button' to="" style={{ backgroundColor: '#FFF8E6' }} className={Styles.optionsContentContainer}>
+                                <div>
+                                    <IoPeople size={40} color="#A26D4F" />
+                                    <p className={Styles.optionTitle}>सभी ऑपरेटर देखें</p>
+                                    <p className={Styles.optionSubtitle}>वे सभी ऑपरेटर जो प्रविष्टियाँ कर रहे हैं</p>
+                                </div>
+                            </Link>
+
+                            <Link role='button' to="" style={{ backgroundColor: '#FFEBD8' }} className={Styles.optionsContentContainer}>
+                                <div>
+                                    <BsFillFileBarGraphFill size={38} color="#E09B74" />
+                                    <p className={Styles.optionTitle}>सारांश देखें</p>
+                                    <p className={Styles.optionSubtitle}>मुख्य बिंदुओं और गतिविधियों का संक्षिप्त विवरण देखें</p>
+                                </div>
+                            </Link>
+
+                        </>
+                    }
+                    
                 </div>
+            </div>
+
+            <div>
+                <p className={Styles.sectionHeading}>बच्चों में कुपोषण के ख़िलाफ़ एक <span style={{textDecoration:"underline", textDecorationColor:"#FDB10D", textDecorationThickness:3}}>सशक्त पहल</span> की शुरुआत</p>
+
+                <div className={Styles.imageContainer}>
+                    <img src="/public/home1.jpeg" className={Styles.homeDisplayImage} />
+                    <img src="/public/home2.jpeg" className={Styles.homeDisplayImage} />
+                    <img src="/public/home3.jpeg" className={Styles.homeDisplayImage} />
+
+                </div>
+            </div>
+            <div className={Styles.bottomStrip}>
+                <p className={Styles.bottomText}>&#169; Kilkari</p>
             </div>
         </div>
     )
