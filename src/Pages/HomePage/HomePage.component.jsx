@@ -42,7 +42,7 @@ const HomePage = () => {
                 </div>
 
                 <div className={Styles.illustrationContainer}>
-                    <img className={Styles.illustration} src="/public/home_illus.png" />
+                    <img className={Styles.illustration} src="/home_illus.png" />
                     <svg className={Styles.illustrationBackground} viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                         <path fill="#F2F4F8" d="M52.1,-45.4C67.2,-37,78.9,-18.5,77.9,-0.9C77,16.7,63.6,33.4,48.5,43.5C33.4,53.5,16.7,56.9,0.1,56.9C-16.5,56.8,-33.1,53.2,-42.6,43.1C-52.2,33.1,-54.8,16.5,-52.6,2.2C-50.5,-12.2,-43.5,-24.4,-34,-32.8C-24.4,-41.1,-12.2,-45.6,3.2,-48.8C18.5,-51.9,37,-53.7,52.1,-45.4Z" transform="translate(100 100)" />
                     </svg>
