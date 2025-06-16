@@ -9,6 +9,7 @@ import moment from "moment";
 import UserContext from "../../Contexts/UserData.context";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router";
+import CheckAuthBox from "../../workload/CheckAuthBox.component";
 
 const EnrollChild = () => {
 
@@ -17,11 +18,6 @@ const EnrollChild = () => {
     const [userData] = useContext(UserContext)
     const navigate = useNavigate()
 
-    useEffect(()=>{
-        if (!firebaseAuth.currentUser) {
-            navigate("/")
-        }
-    }, [])
 
     const handleLogout = () => {
         signOut(firebaseAuth);
@@ -129,7 +125,7 @@ const EnrollChild = () => {
         enrollmentDetail.uid = push(ref(firebaseDatabase, `ALL_CHILDREN_ENROLLED`)).key
         enrollmentDetail.numberOfEntries = 0
         enrollmentDetail.lastEntryDate = ""
-        
+
         await set(ref(firebaseDatabase, `OPERATOR_WISE_ENROLLMENT/${enrollmentDetail.enrolledByUid}/${enrollmentDetail.uid}`), enrollmentDetail)
         await set(ref(firebaseDatabase, `ALL_ENROLLMENTS/${enrollmentDetail.uid}`), enrollmentDetail)
         toast.success("नया बच्चा नामांकित हुआ")
@@ -145,158 +141,160 @@ const EnrollChild = () => {
     }
 
     return (
-        <div className={Styles.enrollChildContainer}>
-            <div className={Styles.messageImageContainer}>
-                <img className={Styles.illustration} alt="Kilkari" src="/mother.svg" />
-                <img className={Styles.logo} src="/logo.png" alt="Kilkari" />
-                <p className={Styles.focusText}>पोषण अभियान</p>
-                <p className={Styles.focusSubText}>जिला प्रशासन देवास की एक पहल।</p>
-            </div>
-            <div className={Styles.formHeaderContainer}>
-                <div className={Styles.navigationContainer}>
-                    <img className={Styles.mpLogo} src="/mp_logo.png" alt="Madhya Pradesh" />
-                    <div>
-                        <p><strong>{userData.name}</strong></p>
-                        <p onClick={handleLogout} style={{cursor:"pointer", textDecoration:"underline"}}>Logout</p>
-                    </div>
+        <CheckAuthBox>
+            <div className={Styles.enrollChildContainer}>
+                <div className={Styles.messageImageContainer}>
+                    <img className={Styles.illustration} alt="Kilkari" src="/mother.svg" />
+                    <img className={Styles.logo} src="/logo.png" alt="Kilkari" />
+                    <p className={Styles.focusText}>पोषण अभियान</p>
+                    <p className={Styles.focusSubText}>जिला प्रशासन देवास की एक पहल।</p>
                 </div>
-
-                <div className={Styles.formTitleContainer}>
-                    <p className={Styles.formTitle}>कृपया नए बच्चे का नामांकन करने के लिए नीचे दिए गए विवरण भरें।</p>
-
-                    <div className={Styles.formContainer}>
-                        <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>बेङ-नंबर</label>
-                            <TextField fullWidth required value={enrollmentDetail.bedNumber} name="bedNumber" onChange={handleChange} size='small' />
-                        </div>
-
-                        <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>भर्ती होने की दिनांक</label>
-                            <TextField fullWidth required value={enrollmentDetail.admitDate} name="admitDate" onChange={handleChange} size='small' type="date" />
-                        </div>
-
-                        <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>SAM-नंबर</label>
-                            <TextField fullWidth required value={enrollmentDetail.samNumber} name="samNumber" onChange={handleChange} size='small' />
-                        </div>
-
-                        <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>बच्चे का नाम</label>
-                            <TextField required value={enrollmentDetail.name} name="name" onChange={handleChange} size='small' />
-                        </div>
-
-                        <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>लिंग</label>
-                            <Select required value={enrollmentDetail.gender} name="gender" onChange={handleChange} size='small'>
-                                <MenuItem value="पुरुष">पुरुष</MenuItem>
-                                <MenuItem value="महिला">महिला</MenuItem>
-                            </Select>
-                        </div>
-
-                        <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>पिता का नाम</label>
-                            <TextField required value={enrollmentDetail.fatherName} name="fatherName" onChange={handleChange} size='small' />
-                        </div>
-
-                        <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>माता का नाम</label>
-                            <TextField required value={enrollmentDetail.motherName} name="motherName" onChange={handleChange} size='small' />
-                        </div>
-
-                        <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>मोबाइल नंबर</label>
-                            <TextField required value={enrollmentDetail.phoneNumber} name="phoneNumber" onChange={handleChange} size='small' />
-                        </div>
-
-                        <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>परिवार में से किसी एक व्यक्ति का आधार नंबर</label>
-                            <TextField required value={enrollmentDetail.familyMemberAadharNumber} name="familyMemberAadharNumber" onChange={handleChange} size='small' />
-                        </div>
-
-                        <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>जाती</label>
-                            <Select required value={enrollmentDetail.caste} name="caste" onChange={handleChange} size='small'>
-                                <MenuItem value="सामान्य-वर्ग">सामान्य-वर्ग</MenuItem>
-                                <MenuItem value="पिछड़ा-वर्ग">पिछड़ा-वर्ग</MenuItem>
-                                <MenuItem value="अनुसूचित-जाति">अनुसूचित-जाति</MenuItem>
-                                <MenuItem value="अनुसूचित-जनजाति">अनुसूचित-जनजाति</MenuItem>
-                            </Select>
-                        </div>
-
-                        <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>जिला</label>
-                            <Select required value={enrollmentDetail.jila} name="jila" onChange={handleChange} size='small'>
-                                <MenuItem value="देवास">देवास</MenuItem>
-                            </Select>
-                        </div>
-
-                        <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>तहसील</label>
-                            <Select required value={enrollmentDetail.tahasil} name="tahasil" onChange={handleChange} size='small'>
-                                <MenuItem value="सोनकच्छ">सोनकच्छ</MenuItem>
-                            </Select>
-                        </div>
-
-                        <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>गाँव का नाम</label>
-                            <TextField required value={enrollmentDetail.villageName} name="villageName" onChange={handleChange} size='small' />
-                        </div>
-
-                        <div style={{ marginTop: '3px' }} className={`${Styles.inputContainer} ${Styles.span2}`}>
-                            <label className={Styles.labelText}>पता डिटेल में</label>
-                            <TextField required value={enrollmentDetail.address} name="address" onChange={handleChange} size='small' />
-                        </div>
-
-                        <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>आंगनवाड़ी कार्यकर्ता नाम</label>
-                            <TextField required value={enrollmentDetail.anganwadiWorkerName} name="anganwadiWorkerName" onChange={handleChange} size='small' />
-                        </div>
-
-                        <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>आंगनवाड़ी कार्यकर्ता मोबाइल नंबर</label>
-                            <TextField required value={enrollmentDetail.anganwadiWorkerNumber} name="anganwadiWorkerNumber" onChange={handleChange} size='small' />
-                        </div>
-
-                        <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>आंगनवाड़ी सुपरवाईजर नाम</label>
-                            <TextField required value={enrollmentDetail.anganwadiSupervisorName} name="anganwadiSupervisorName" onChange={handleChange} size='small' />
-                        </div>
-
-                        <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>आंगनवाड़ी सुपरवाईजर मोबाइल नंबर</label>
-                            <TextField required value={enrollmentDetail.anganwadiSupervisorNumber} name="anganwadiSupervisorNumber" onChange={handleChange} size='small' />
-                        </div>
-
-                        <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>भर्ती होने के समय-SD</label>
-                            <TextField required value={enrollmentDetail.admitTimeSD} name="admitTimeSD" onChange={handleChange} size='small' />
-                        </div>
-
-                        <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>भर्ती होने के समय हाइट</label>
-                            <TextField required value={enrollmentDetail.admitTimeHeight} name="admitTimeHeight" onChange={handleChange} size='small' />
-                        </div>
-
-                        <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>भर्ती होने के समय वजन</label>
-                            <TextField required value={enrollmentDetail.admitTimeWeight} name="admitTimeWeight" onChange={handleChange} size='small' />
-                        </div>
-
-                        <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>भर्ती होने के समय हिमो ग्लोबिन</label>
-                            <TextField required value={enrollmentDetail.admitTimeHB} name="admitTimeHB" onChange={handleChange} size='small' />
-                        </div>
-
-                        <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
-                            <label className={Styles.labelText}>भर्ती होने के समय-MUAC</label>
-                            <TextField required value={enrollmentDetail.admitTimeMUAC} name="admitTimeMUAC" onChange={handleChange} size='small' />
+                <div className={Styles.formHeaderContainer}>
+                    <div className={Styles.navigationContainer}>
+                        <img className={Styles.mpLogo} src="/mp_logo.png" alt="Madhya Pradesh" />
+                        <div>
+                            <p><strong>{userData.name}</strong></p>
+                            <p onClick={handleLogout} style={{ cursor: "pointer", textDecoration: "underline" }}>Logout</p>
                         </div>
                     </div>
 
-                    <Button disabled={loading} onClick={handleSubmit} type='submit' sx={{ width: '200px' }} variant='contained'>Submit</Button>
+                    <div className={Styles.formTitleContainer}>
+                        <p className={Styles.formTitle}>कृपया नए बच्चे का नामांकन करने के लिए नीचे दिए गए विवरण भरें।</p>
+
+                        <div className={Styles.formContainer}>
+                            <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
+                                <label className={Styles.labelText}>बेङ-नंबर</label>
+                                <TextField fullWidth required value={enrollmentDetail.bedNumber} name="bedNumber" onChange={handleChange} size='small' />
+                            </div>
+
+                            <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
+                                <label className={Styles.labelText}>भर्ती होने की दिनांक</label>
+                                <TextField fullWidth required value={enrollmentDetail.admitDate} name="admitDate" onChange={handleChange} size='small' type="date" />
+                            </div>
+
+                            <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
+                                <label className={Styles.labelText}>SAM-नंबर</label>
+                                <TextField fullWidth required value={enrollmentDetail.samNumber} name="samNumber" onChange={handleChange} size='small' />
+                            </div>
+
+                            <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
+                                <label className={Styles.labelText}>बच्चे का नाम</label>
+                                <TextField required value={enrollmentDetail.name} name="name" onChange={handleChange} size='small' />
+                            </div>
+
+                            <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
+                                <label className={Styles.labelText}>लिंग</label>
+                                <Select required value={enrollmentDetail.gender} name="gender" onChange={handleChange} size='small'>
+                                    <MenuItem value="पुरुष">पुरुष</MenuItem>
+                                    <MenuItem value="महिला">महिला</MenuItem>
+                                </Select>
+                            </div>
+
+                            <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
+                                <label className={Styles.labelText}>पिता का नाम</label>
+                                <TextField required value={enrollmentDetail.fatherName} name="fatherName" onChange={handleChange} size='small' />
+                            </div>
+
+                            <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
+                                <label className={Styles.labelText}>माता का नाम</label>
+                                <TextField required value={enrollmentDetail.motherName} name="motherName" onChange={handleChange} size='small' />
+                            </div>
+
+                            <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
+                                <label className={Styles.labelText}>मोबाइल नंबर</label>
+                                <TextField required value={enrollmentDetail.phoneNumber} name="phoneNumber" onChange={handleChange} size='small' />
+                            </div>
+
+                            <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
+                                <label className={Styles.labelText}>परिवार में से किसी एक व्यक्ति का आधार नंबर</label>
+                                <TextField required value={enrollmentDetail.familyMemberAadharNumber} name="familyMemberAadharNumber" onChange={handleChange} size='small' />
+                            </div>
+
+                            <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
+                                <label className={Styles.labelText}>जाती</label>
+                                <Select required value={enrollmentDetail.caste} name="caste" onChange={handleChange} size='small'>
+                                    <MenuItem value="सामान्य-वर्ग">सामान्य-वर्ग</MenuItem>
+                                    <MenuItem value="पिछड़ा-वर्ग">पिछड़ा-वर्ग</MenuItem>
+                                    <MenuItem value="अनुसूचित-जाति">अनुसूचित-जाति</MenuItem>
+                                    <MenuItem value="अनुसूचित-जनजाति">अनुसूचित-जनजाति</MenuItem>
+                                </Select>
+                            </div>
+
+                            <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
+                                <label className={Styles.labelText}>जिला</label>
+                                <Select required value={enrollmentDetail.jila} name="jila" onChange={handleChange} size='small'>
+                                    <MenuItem value="देवास">देवास</MenuItem>
+                                </Select>
+                            </div>
+
+                            <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
+                                <label className={Styles.labelText}>तहसील</label>
+                                <Select required value={enrollmentDetail.tahasil} name="tahasil" onChange={handleChange} size='small'>
+                                    <MenuItem value="सोनकच्छ">सोनकच्छ</MenuItem>
+                                </Select>
+                            </div>
+
+                            <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
+                                <label className={Styles.labelText}>गाँव का नाम</label>
+                                <TextField required value={enrollmentDetail.villageName} name="villageName" onChange={handleChange} size='small' />
+                            </div>
+
+                            <div style={{ marginTop: '3px' }} className={`${Styles.inputContainer} ${Styles.span2}`}>
+                                <label className={Styles.labelText}>पता डिटेल में</label>
+                                <TextField required value={enrollmentDetail.address} name="address" onChange={handleChange} size='small' />
+                            </div>
+
+                            <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
+                                <label className={Styles.labelText}>आंगनवाड़ी कार्यकर्ता नाम</label>
+                                <TextField required value={enrollmentDetail.anganwadiWorkerName} name="anganwadiWorkerName" onChange={handleChange} size='small' />
+                            </div>
+
+                            <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
+                                <label className={Styles.labelText}>आंगनवाड़ी कार्यकर्ता मोबाइल नंबर</label>
+                                <TextField required value={enrollmentDetail.anganwadiWorkerNumber} name="anganwadiWorkerNumber" onChange={handleChange} size='small' />
+                            </div>
+
+                            <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
+                                <label className={Styles.labelText}>आंगनवाड़ी सुपरवाईजर नाम</label>
+                                <TextField required value={enrollmentDetail.anganwadiSupervisorName} name="anganwadiSupervisorName" onChange={handleChange} size='small' />
+                            </div>
+
+                            <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
+                                <label className={Styles.labelText}>आंगनवाड़ी सुपरवाईजर मोबाइल नंबर</label>
+                                <TextField required value={enrollmentDetail.anganwadiSupervisorNumber} name="anganwadiSupervisorNumber" onChange={handleChange} size='small' />
+                            </div>
+
+                            <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
+                                <label className={Styles.labelText}>भर्ती होने के समय-SD</label>
+                                <TextField required value={enrollmentDetail.admitTimeSD} name="admitTimeSD" onChange={handleChange} size='small' />
+                            </div>
+
+                            <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
+                                <label className={Styles.labelText}>भर्ती होने के समय हाइट</label>
+                                <TextField required value={enrollmentDetail.admitTimeHeight} name="admitTimeHeight" onChange={handleChange} size='small' />
+                            </div>
+
+                            <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
+                                <label className={Styles.labelText}>भर्ती होने के समय वजन</label>
+                                <TextField required value={enrollmentDetail.admitTimeWeight} name="admitTimeWeight" onChange={handleChange} size='small' />
+                            </div>
+
+                            <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
+                                <label className={Styles.labelText}>भर्ती होने के समय हिमो ग्लोबिन</label>
+                                <TextField required value={enrollmentDetail.admitTimeHB} name="admitTimeHB" onChange={handleChange} size='small' />
+                            </div>
+
+                            <div style={{ marginTop: '3px' }} className={Styles.inputContainer}>
+                                <label className={Styles.labelText}>भर्ती होने के समय-MUAC</label>
+                                <TextField required value={enrollmentDetail.admitTimeMUAC} name="admitTimeMUAC" onChange={handleChange} size='small' />
+                            </div>
+                        </div>
+
+                        <Button disabled={loading} onClick={handleSubmit} type='submit' sx={{ width: '200px' }} variant='contained'>Submit</Button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </CheckAuthBox>
     )
 }
 

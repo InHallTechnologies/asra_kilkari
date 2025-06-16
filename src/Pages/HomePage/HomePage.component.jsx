@@ -3,29 +3,30 @@ import { signOut } from "firebase/auth";
 import { firebaseAuth } from "../../backend/firebaseHandler";
 import { FaCalendar, FaBaby, FaListAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import UserContext from "../../Contexts/UserData.context";
 import { IoPeople } from "react-icons/io5";
 import { BsFillFileBarGraphFill } from "react-icons/bs";
+import CheckAuthBox from "../../workload/CheckAuthBox.component";
+
 
 const HomePage = () => {
 
     const [userData] = useContext(UserContext)
     const navigate = useNavigate()
 
-    useEffect(() => {
-        if (!firebaseAuth.currentUser) {
-            navigate("/")
-        }
-    }, [])
+
+
 
     const handleLogout = () => {
         signOut(firebaseAuth);
         navigate("/")
     }
 
+
+
     return (
-        <div>
+        <CheckAuthBox>
             <div className={Styles.navigationContainer}>
                 <img className={Styles.logo} src="/logo.png" alt="Kilkari" />
                 <div>
@@ -122,7 +123,7 @@ const HomePage = () => {
             <div className={Styles.bottomStrip}>
                 <p className={Styles.bottomText}>&#169; Kilkari</p>
             </div>
-        </div>
+        </CheckAuthBox>
     )
 }
 

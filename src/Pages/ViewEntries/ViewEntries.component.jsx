@@ -6,6 +6,7 @@ import { Box, CircularProgress, MenuItem, Select, Table, TableBody, TableCell, T
 import UserContext from "../../Contexts/UserData.context";
 import { useNavigate } from "react-router";
 import { signOut } from "firebase/auth";
+import CheckAuthBox from "../../workload/CheckAuthBox.component";
 
 const ViewEntries = () => {
 
@@ -15,11 +16,6 @@ const ViewEntries = () => {
     const [userData] = useContext(UserContext)
     const navigate = useNavigate()
 
-     useEffect(()=>{
-        if (!firebaseAuth.currentUser) {
-            navigate("/")
-        }
-    }, [])
 
     const handleLogout = () => {
         signOut(firebaseAuth);
@@ -45,90 +41,92 @@ const ViewEntries = () => {
     }
 
     return (
-        <div className={Styles.viewEntriesContainer}>
-            <div className={Styles.messageImageContainer}>
-                <img className={Styles.illustration} alt="Kilkari" src="/mother.svg" />
-                <img className={Styles.logo} src="/logo.png" alt="Kilkari" />
-                <p className={Styles.focusText}>पोषण अभियान</p>
-                <p className={Styles.focusSubText}>जिला प्रशासन देवास की एक पहल।</p>
-            </div>
-
-            <div className={Styles.navigationTableContainer}>
-                <div className={Styles.navigationContainer}>
-                    <img className={Styles.mpLogo} src="/mp_logo.png" alt="Kilkari" />
-                    <div>
-                        <p><strong>{userData.name}</strong></p>
-                        <p onClick={handleLogout} style={{cursor:"pointer", textDecoration:"underline"}}>Logout</p>
-                    </div>
+        <CheckAuthBox>
+            <div className={Styles.viewEntriesContainer}>
+                <div className={Styles.messageImageContainer}>
+                    <img className={Styles.illustration} alt="Kilkari" src="/mother.svg" />
+                    <img className={Styles.logo} src="/logo.png" alt="Kilkari" />
+                    <p className={Styles.focusText}>पोषण अभियान</p>
+                    <p className={Styles.focusSubText}>जिला प्रशासन देवास की एक पहल।</p>
                 </div>
 
-                {
-                    !(allChildren.length === 0)
-                    &&
-                    <div className={Styles.tabsContainer}>
-                        <p onClick={() => { setCurrentTab("CHILDREN") }} className={currentTab === "CHILDREN" ? Styles.selectedTab : Styles.unSelectedTab}>All Enrollments</p>
-                        <p onClick={() => { handleCurrentTab("ENTRIES") }} className={currentTab === "ENTRIES" ? Styles.selectedTab : Styles.unSelectedTab}>Daily Updates</p>
+                <div className={Styles.navigationTableContainer}>
+                    <div className={Styles.navigationContainer}>
+                        <img className={Styles.mpLogo} src="/mp_logo.png" alt="Kilkari" />
+                        <div>
+                            <p><strong>{userData.name}</strong></p>
+                            <p onClick={handleLogout} style={{ cursor: "pointer", textDecoration: "underline" }}>Logout</p>
+                        </div>
                     </div>
-                }
 
-                <div className={Styles.tableContainer}>
                     {
-                        loading
-                            ?
-                            <CircularProgress style={{ margin: "50px auto" }} />
-                            :
-                            currentTab === "CHILDREN"
-                                ?
-                                <Box>
-                                    <TableContainer>
-                                        <Table stickyHeader>
-                                            <TableHead>
-                                                <TableRow>
-                                                    <TableCell style={{ fontWeight: 700, color: "#352F6C", backgroundColor: "rgba(1, 1, 1, 0)" }}>#</TableCell>
-                                                    <TableCell style={{ fontWeight: 700, color: "#352F6C", backgroundColor: "rgba(1, 1, 1, 0)" }}>नाम</TableCell>
-                                                    <TableCell style={{ fontWeight: 700, color: "#352F6C", backgroundColor: "rgba(1, 1, 1, 0)" }}>बेङ-नंबर</TableCell>
-                                                    <TableCell style={{ fontWeight: 700, color: "#352F6C", backgroundColor: "rgba(1, 1, 1, 0)" }}>भर्ती होने की दिनांक</TableCell>
-                                                    <TableCell style={{ fontWeight: 700, color: "#352F6C", backgroundColor: "rgba(1, 1, 1, 0)" }}>SAM-नंबर</TableCell>
-                                                    <TableCell style={{ fontWeight: 700, color: "#352F6C", backgroundColor: "rgba(1, 1, 1, 0)" }}>पिता का नाम</TableCell>
-                                                    <TableCell style={{ fontWeight: 700, color: "#352F6C", backgroundColor: "rgba(1, 1, 1, 0)" }}>माता का नाम</TableCell>
-                                                    <TableCell style={{ fontWeight: 700, color: "#352F6C", backgroundColor: "rgba(1, 1, 1, 0)" }}>मोबाइल नंबर</TableCell>
-                                                    <TableCell style={{ fontWeight: 700, color: "#352F6C", backgroundColor: "rgba(1, 1, 1, 0)" }}>कुल प्रविष्टियाँ</TableCell>
-                                                    <TableCell style={{ fontWeight: 700, color: "#352F6C", backgroundColor: "rgba(1, 1, 1, 0)" }}>पिछली प्रविष्टि की तारीख</TableCell>
-                                                    <TableCell style={{ fontWeight: 700, color: "#352F6C", backgroundColor: "rgba(1, 1, 1, 0)" }}></TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody style={{ backgroundColor: "white" }}>
-                                                {
-                                                    allChildren.map((item, index) => {
-                                                        return (
-                                                            <TableRow key={index.toString()} >
-                                                                <TableCell>{(index + 1).toString()}</TableCell>
-                                                                <TableCell>{item.name}</TableCell>
-                                                                <TableCell>{item.bedNumber}</TableCell>
-                                                                <TableCell>{item.admitDate}</TableCell>
-                                                                <TableCell>{item.samNumber}</TableCell>
-                                                                <TableCell>{item.fatherName}</TableCell>
-                                                                <TableCell>{item.motherName}</TableCell>
-                                                                <TableCell>{item.phoneNumber}</TableCell>
-                                                                <TableCell>{item.numberOfEntries}</TableCell>
-                                                                <TableCell>{item.lastEntryDate ? item.lastEntryDate.split(" ")[0] : ""}</TableCell>
-                                                                <TableCell><p style={{ fontWeight: 600, fontSize: 16, backgroundColor: "#FDB10D", padding: "3px 15px", borderRadius: "5px", cursor: "pointer", color: "white" }}>Detail</p></TableCell>
-                                                            </TableRow>
-                                                        )
-                                                    })
-                                                }
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                </Box>
-                                :
-                                <Box>
-                                    <DailyUpdate allChildren={allChildren} />
-                                </Box>
+                        !(allChildren.length === 0)
+                        &&
+                        <div className={Styles.tabsContainer}>
+                            <p onClick={() => { setCurrentTab("CHILDREN") }} className={currentTab === "CHILDREN" ? Styles.selectedTab : Styles.unSelectedTab}>All Enrollments</p>
+                            <p onClick={() => { handleCurrentTab("ENTRIES") }} className={currentTab === "ENTRIES" ? Styles.selectedTab : Styles.unSelectedTab}>Daily Updates</p>
+                        </div>
                     }
+
+                    <div className={Styles.tableContainer}>
+                        {
+                            loading
+                                ?
+                                <CircularProgress style={{ margin: "50px auto" }} />
+                                :
+                                currentTab === "CHILDREN"
+                                    ?
+                                    <Box>
+                                        <TableContainer>
+                                            <Table stickyHeader>
+                                                <TableHead>
+                                                    <TableRow>
+                                                        <TableCell style={{ fontWeight: 700, color: "#352F6C", backgroundColor: "rgba(1, 1, 1, 0)" }}>#</TableCell>
+                                                        <TableCell style={{ fontWeight: 700, color: "#352F6C", backgroundColor: "rgba(1, 1, 1, 0)" }}>नाम</TableCell>
+                                                        <TableCell style={{ fontWeight: 700, color: "#352F6C", backgroundColor: "rgba(1, 1, 1, 0)" }}>बेङ-नंबर</TableCell>
+                                                        <TableCell style={{ fontWeight: 700, color: "#352F6C", backgroundColor: "rgba(1, 1, 1, 0)" }}>भर्ती होने की दिनांक</TableCell>
+                                                        <TableCell style={{ fontWeight: 700, color: "#352F6C", backgroundColor: "rgba(1, 1, 1, 0)" }}>SAM-नंबर</TableCell>
+                                                        <TableCell style={{ fontWeight: 700, color: "#352F6C", backgroundColor: "rgba(1, 1, 1, 0)" }}>पिता का नाम</TableCell>
+                                                        <TableCell style={{ fontWeight: 700, color: "#352F6C", backgroundColor: "rgba(1, 1, 1, 0)" }}>माता का नाम</TableCell>
+                                                        <TableCell style={{ fontWeight: 700, color: "#352F6C", backgroundColor: "rgba(1, 1, 1, 0)" }}>मोबाइल नंबर</TableCell>
+                                                        <TableCell style={{ fontWeight: 700, color: "#352F6C", backgroundColor: "rgba(1, 1, 1, 0)" }}>कुल प्रविष्टियाँ</TableCell>
+                                                        <TableCell style={{ fontWeight: 700, color: "#352F6C", backgroundColor: "rgba(1, 1, 1, 0)" }}>पिछली प्रविष्टि की तारीख</TableCell>
+                                                        <TableCell style={{ fontWeight: 700, color: "#352F6C", backgroundColor: "rgba(1, 1, 1, 0)" }}></TableCell>
+                                                    </TableRow>
+                                                </TableHead>
+                                                <TableBody style={{ backgroundColor: "white" }}>
+                                                    {
+                                                        allChildren.map((item, index) => {
+                                                            return (
+                                                                <TableRow key={index.toString()} >
+                                                                    <TableCell>{(index + 1).toString()}</TableCell>
+                                                                    <TableCell>{item.name}</TableCell>
+                                                                    <TableCell>{item.bedNumber}</TableCell>
+                                                                    <TableCell>{item.admitDate}</TableCell>
+                                                                    <TableCell>{item.samNumber}</TableCell>
+                                                                    <TableCell>{item.fatherName}</TableCell>
+                                                                    <TableCell>{item.motherName}</TableCell>
+                                                                    <TableCell>{item.phoneNumber}</TableCell>
+                                                                    <TableCell>{item.numberOfEntries}</TableCell>
+                                                                    <TableCell>{item.lastEntryDate ? item.lastEntryDate.split(" ")[0] : ""}</TableCell>
+                                                                    <TableCell><p style={{ fontWeight: 600, fontSize: 16, backgroundColor: "#FDB10D", padding: "3px 15px", borderRadius: "5px", cursor: "pointer", color: "white" }}>Detail</p></TableCell>
+                                                                </TableRow>
+                                                            )
+                                                        })
+                                                    }
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    </Box>
+                                    :
+                                    <Box>
+                                        <DailyUpdate allChildren={allChildren} />
+                                    </Box>
+                        }
+                    </div>
                 </div>
             </div>
-        </div>
+        </CheckAuthBox>
     )
 }
 
@@ -150,7 +148,7 @@ const DailyUpdate = ({ allChildren }) => {
                 }
             }, { onlyOnce: true })
         }
-        
+
     }, [selectedChild])
 
 

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import Styles from "./Authentication.module.css";
-import { Button, TextField } from "@mui/material";
+import { Button, CircularProgress, TextField } from "@mui/material";
 import { toast } from "react-toastify";
 import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 import { firebaseAuth, firebaseDatabase } from "../../backend/firebaseHandler";
@@ -14,10 +14,10 @@ const Authentication = () => {
     const [userData, setUserData] = useContext(UserContext)
     const navigate = useNavigate();
 
+
     useEffect(() => {
         const unsubScribe = onAuthStateChanged(firebaseAuth, (user) => {
             if (user) {
-                console.log(user.uid)
                 onValue(ref(firebaseDatabase, `USER_ARCHIVE/${user.uid}`), (snap) => {
                     if (snap.exists()) {
                         setUserData(snap.val())
@@ -26,7 +26,7 @@ const Authentication = () => {
                         alert("Something went wrong!")
                     }
                 })
-                
+
             }
             setCredentials({ ...credentials, loading: false })
         })
@@ -44,7 +44,7 @@ const Authentication = () => {
 
     const handleSubmit = async () => {
         setCredentials({ ...credentials, loading: true })
-        await signInWithEmailAndPassword(firebaseAuth, credentials.emailId, credentials.password).then((user)=>{
+        await signInWithEmailAndPassword(firebaseAuth, credentials.emailId, credentials.password).then((user) => {
             onValue(ref(firebaseDatabase, `USER_ARCHIVE/${user.user.uid}`), (snap) => {
                 if (snap.exists()) {
                     setUserData(snap.val())
@@ -57,6 +57,14 @@ const Authentication = () => {
             toast.warn(err.message)
         })
     }
+
+    // if (isLoggedIn.loading) {
+    //     return (
+    //         <div style={{ width: '100dvw', height: '100dvh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    //             <CircularProgress />
+    //         </div>
+    //     )
+    // }
 
     return (
         <div className={Styles.authenticationContainer}>
