@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Styles from "./UpdateInformation.module.css"
 import UpdateSample from "../../entities/Update.sample";
 import { Button, MenuItem, Select, TextField } from "@mui/material";
@@ -141,7 +141,7 @@ const UpdateInformation = () => {
         entryDetail.entryKey = push(ref(firebaseDatabase, `CHILD_WISE_ENTRY/${selectedChild.uid}`)).key
 
         selectedChild.lastEntryDate = entryDetail.entryDate
-        selectedChild.numberOfEntries = selectedChild.numberOfEntries+1
+        selectedChild.numberOfEntries = selectedChild.numberOfEntries + 1
 
         await set(ref(firebaseDatabase, `CHILD_WISE_ENTRY/${selectedChild.uid}/${entryDetail.entryKey}`), entryDetail)
         await set(ref(firebaseDatabase, `OPERATOR_WISE_ENROLLMENT/${entryDetail.entryByUid}/${entryDetail.childUid}`), selectedChild)
